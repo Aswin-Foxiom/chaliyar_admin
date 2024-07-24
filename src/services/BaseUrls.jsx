@@ -1,0 +1,12 @@
+export const BaseUrl = "https://dev.foxiomlabs.com/chaliyar/api/";
+// export const BaseUrl = "http://192.168.1.5:8001/api/";
+// export const BaseUrl = "http://localhost:8001/api/";
+export const CategoryUrl = "category";
+export const SubCategoryUrl = "sub-category";
+export const ProductsUrl = "product";
+export const OrdersUrl = "order";
+export const OrderDetailsUrl = "order/details";
+export const BannersUrl = "banner";
+export const PincodesUrl = "pincode";
+export const UploadUrl = "upload";
+export const DashboardCounts = "dashboard/countdata";

@@ -1,0 +1,9 @@
+export const IndexPath = "/";
+export const LoginPath = "login";
+export const OrderPath = "orders";
+export const SettingsPath = "settings";
+export const OrderDetailsPath = "order-details";
+export const ProductsPath = "products";
+export const CategoryPath = "category";
+export const CategoryDetailsPath = "category-details";
+export const ProductManagementPath = "product-management";

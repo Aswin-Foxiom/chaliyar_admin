@@ -4,10 +4,15 @@ import { ApiCall } from "../../services/ApiCall";
 import NoDataFound from "../NoDataFound";
 import { capitalizeFirstLetter } from "../../utils/StringFunctions";
 import { showToast } from "../../utils/Toast";
+import DeleteConfirmModal from "../DeleteConfirmModal";
 
 function SubCategoryDatas({ categoryId }) {
-  const [subCategoryDatas, setsubCategoryDatas] = useState([]);
+  const [subCategoryDatasList, setsubCategoryDatasList] = useState([]);
   const [subCategoryname, setsubCategoryname] = useState("");
+  const [deleteModal, setdeleteModal] = useState({
+    show: false,
+    id: null,
+  });
   const [addNew, setaddNew] = useState(false);
   useEffect(() => {
     getSubgroups();
@@ -21,7 +26,7 @@ function SubCategoryDatas({ categoryId }) {
       { categoryId: categoryId }
     );
     if (response?.status) {
-      setsubCategoryDatas(response?.message?.data?.docs);
+      setsubCategoryDatasList(response?.message?.data?.docs);
     }
   };
 
@@ -37,11 +42,17 @@ function SubCategoryDatas({ categoryId }) {
     }
   };
 
-  const deleteSubCategory = async (id) => {
-    const response = await ApiCall("delete", `${SubCategoryUrl}/${id}`);
-    if (response?.status) {
-      getSubgroups();
-      showToast("Subcategory Deleted", "success");
+  const deleteSubCategory = async () => {
+    if (deleteModal?.id) {
+      const response = await ApiCall(
+        "delete",
+        `${SubCategoryUrl}/${deleteModal?.id}`
+      );
+      if (response?.status) {
+        getSubgroups();
+        setdeleteModal({ show: false, id: null });
+        showToast("Subcategory Deleted", "success");
+      }
     }
   };
   return (
@@ -98,11 +109,11 @@ function SubCategoryDatas({ categoryId }) {
         </div>
       )}
 
-      {subCategoryDatas?.length ? (
+      {subCategoryDatasList?.length ? (
         <>
           <div class="row">
             <div className="col">
-              {subCategoryDatas?.map((value, key) => (
+              {subCategoryDatasList?.map((value, key) => (
                 <div className="card mb-3">
                   <div className="card-body">
                     <div className="row">
@@ -119,7 +130,13 @@ function SubCategoryDatas({ categoryId }) {
                       </div>
                       <div className="col-auto">
                         <button
-                          onClick={() => deleteSubCategory(value?._id)}
+                          // onClick={() => deleteSubCategory(value?._id)}
+                          onClick={() =>
+                            setdeleteModal({
+                              show: true,
+                              id: value?._id,
+                            })
+                          }
                           className="btn btn-44 btn-light text-danger shadow-sm"
                         >
                           <i className="bi bi-trash" />
@@ -134,6 +151,13 @@ function SubCategoryDatas({ categoryId }) {
         </>
       ) : (
         <NoDataFound />
+      )}
+      {deleteModal?.show && (
+        <DeleteConfirmModal
+          show={deleteModal?.show}
+          closeFun={() => setdeleteModal({ show: false, id: null })}
+          deleteFun={deleteSubCategory}
+        />
       )}
     </div>
   );

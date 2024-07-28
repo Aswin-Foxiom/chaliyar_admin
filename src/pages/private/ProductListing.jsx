@@ -6,9 +6,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { IndexPath, ProductManagementPath } from "../../services/urlPaths";
 import { ShortenedName } from "../../utils/StringFunctions";
 import { InputSwitch } from "primereact/inputswitch";
+import DeleteConfirmModal from "../../components/DeleteConfirmModal";
+import { showToast } from "../../utils/Toast";
 
 function ProductListing() {
   let navigate = useNavigate();
+  const [deleteModal, setdeleteModal] = useState({
+    show: false,
+    id: null,
+  });
   const [query, setquery] = useState("");
   const [status, setstatus] = useState(null);
   const [productsList, setproductsList] = useState([]);
@@ -56,10 +62,17 @@ function ProductListing() {
     }
   };
 
-  const DeleteProduct = async (id) => {
-    const response = await ApiCall("delete", `${ProductsUrl}/${id}`);
-    if (response?.status) {
-      getProducts();
+  const DeleteProduct = async () => {
+    if (deleteModal?.id) {
+      const response = await ApiCall(
+        "delete",
+        `${ProductsUrl}/${deleteModal?.id}`
+      );
+      if (response?.status) {
+        getProducts();
+        setdeleteModal({ show: false, id: null });
+        showToast(`Product deleted successfully`, "success");
+      }
     }
   };
 
@@ -215,7 +228,13 @@ function ProductListing() {
                       <div className="col-auto">
                         <button
                           className="btn btn-44 btn-light text-danger shadow-sm"
-                          onClick={() => DeleteProduct(value?._id)}
+                          // onClick={() => DeleteProduct(value?._id)}
+                          onClick={() =>
+                            setdeleteModal({
+                              show: true,
+                              id: value?._id,
+                            })
+                          }
                         >
                           <i className="bi bi-trash" />
                         </button>{" "}
@@ -358,6 +377,13 @@ function ProductListing() {
           </div> */}
         </div>
       </div>
+      {deleteModal?.show && (
+        <DeleteConfirmModal
+          show={deleteModal?.show}
+          closeFun={() => setdeleteModal({ show: false, id: null })}
+          deleteFun={DeleteProduct}
+        />
+      )}
     </div>
   );
 }

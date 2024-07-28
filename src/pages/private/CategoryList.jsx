@@ -6,9 +6,14 @@ import { capitalizeFirstLetter } from "../../utils/StringFunctions";
 import { useNavigate } from "react-router-dom";
 import { CategoryDetailsPath, IndexPath } from "../../services/urlPaths";
 import { showToast } from "../../utils/Toast";
+import DeleteConfirmModal from "../../components/DeleteConfirmModal";
 
 function CategoryList() {
   let navigate = useNavigate();
+  const [deleteModal, setdeleteModal] = useState({
+    show: false,
+    id: null,
+  });
   const [addNew, setaddNew] = useState(false);
   const [categoryName, setcategoryName] = useState("");
   const [query, setquery] = useState("");
@@ -34,11 +39,17 @@ function CategoryList() {
     }
   };
 
-  const deleteCategory = async (id) => {
-    const response = await ApiCall("delete", `${CategoryUrl}/${id}`);
-    if (response?.status) {
-      getCategoryList();
-      showToast("Category deleted successfully", "success");
+  const deleteCategory = async () => {
+    if (deleteModal?.id) {
+      const response = await ApiCall(
+        "delete",
+        `${CategoryUrl}/${deleteModal?.id}`
+      );
+      if (response?.status) {
+        getCategoryList();
+        showToast("Category deleted successfully", "success");
+        setdeleteModal({ show: false, id: null });
+      }
     }
   };
   return (
@@ -155,7 +166,13 @@ function CategoryList() {
                       </div>
                       <div className="col-auto">
                         <button
-                          onClick={() => deleteCategory(value?._id)}
+                          // onClick={() => deleteCategory(value?._id)}
+                          onClick={() =>
+                            setdeleteModal({
+                              show: true,
+                              id: value?._id,
+                            })
+                          }
                           className="btn btn-44 btn-light text-danger shadow-sm"
                         >
                           <i className="bi bi-trash" />
@@ -171,6 +188,13 @@ function CategoryList() {
           )}
         </div>
       </div>
+      {deleteModal?.show && (
+        <DeleteConfirmModal
+          show={deleteModal?.show}
+          closeFun={() => setdeleteModal({ show: false, id: null })}
+          deleteFun={deleteCategory}
+        />
+      )}
     </div>
   );
 }

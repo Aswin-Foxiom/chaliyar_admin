@@ -1,5 +1,5 @@
-export const BaseUrl = "https://dev.foxiomlabs.com/chaliyar/api/";
-// export const BaseUrl = "http://192.168.1.5:8001/api/";
+// export const BaseUrl = "https://dev.foxiomlabs.com/chaliyar/api/";
+export const BaseUrl = "https://server.chaliyarfishhub.com/api/";
 // export const BaseUrl = "http://localhost:8001/api/";
 export const CategoryUrl = "category";
 export const SubCategoryUrl = "sub-category";

@@ -165,13 +165,13 @@ function ProductManagement() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Original Price"
+                placeholder="Sales Price"
                 id="originalPrice"
                 name="originalPrice"
                 value={formik.values.originalPrice}
                 onChange={formik.handleChange}
               />
-              <label htmlFor="originalPrice">Original Price</label>
+              <label htmlFor="originalPrice">Sales Price</label>
               {formik.errors.originalPrice ? (
                 <div className="text-danger">{formik.errors.originalPrice}</div>
               ) : null}
@@ -183,13 +183,13 @@ function ProductManagement() {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Discount Price"
+                placeholder="Original Price"
                 id="discountPrice"
                 name="discountPrice"
                 value={formik.values.discountPrice}
                 onChange={formik.handleChange}
               />
-              <label htmlFor="discountPrice">Discount Price</label>
+              <label htmlFor="discountPrice">Original Price</label>
               {formik.errors.discountPrice ? (
                 <div className="text-danger">{formik.errors.discountPrice}</div>
               ) : null}

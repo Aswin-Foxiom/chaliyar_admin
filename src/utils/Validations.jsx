@@ -55,6 +55,9 @@ export const productValidationSchema = Yup.object({
   description: Yup.string()
     .required("Description is required")
     .max(1000, "Description must be at most 1000 characters long"),
+  multipleImages: Yup.array()
+    .min(1, "At least one image is required") // Ensure at least one image
+    .of(Yup.string().required()), // Validate that each item in the array is a string (URL)
   priceFor: Yup.string()
     .required("Price for unit is required")
     .oneOf(["Kg", "g", "Pieces", "Nos"]),

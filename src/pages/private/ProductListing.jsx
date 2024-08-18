@@ -159,10 +159,10 @@ function ProductListing() {
                   </div>
                   <div
                     class="swiper-slide"
-                    onClick={() => setstatus("out_of_stock")}
+                    onClick={() => setstatus("out of stock")}
                   >
                     <div
-                      class={`tag ${status === "out_of_stock" ? "active" : ""}`}
+                      class={`tag ${status === "out of stock" ? "active" : ""}`}
                     >
                       Out of Stock
                     </div>

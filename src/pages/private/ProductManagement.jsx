@@ -63,7 +63,7 @@ function ProductManagement() {
       status:
         productData?.status === "stock"
           ? true
-          : productData?.status === "out_of_stock"
+          : productData?.status === "out of stock"
           ? false
           : true,
       todaysSpecial: productData?.todaysSpecial
@@ -85,7 +85,7 @@ function ProductManagement() {
     if (values?.status) {
       datas.status = "stock";
     } else {
-      datas.status = "out_of_stock";
+      datas.status = "out of stock";
     }
     let response = null;
     if (!productData?._id) {
@@ -106,16 +106,51 @@ function ProductManagement() {
     }
   };
 
+  // const onImageUpload = async (e, type) => {
+  //   const response = await ApiCall(
+  //     "post",
+  //     UploadUrl,
+  //     {
+  //       files: e.target.files[0],
+  //     },
+  //     {},
+  //     true
+  //   );
+  //   if (response?.status) {
+  //     if (type === "main") {
+  //       formik.setFieldValue("image", BaseUrl + response?.message?.data[0]);
+  //     }
+  //     if (type === "multiple") {
+  //       var datas = formik.values.multipleImages;
+  //       datas.push(BaseUrl + response?.message?.data[0]);
+  //       formik.setFieldValue("multipleImages", datas);
+  //     }
+  //   }
+  //   e.target.value = null;
+  // };
+
   const onImageUpload = async (e, type) => {
+    const file = e.target.files[0];
+
+    // Check if the uploaded file is an image based on MIME type
+    if (!file.type.startsWith("image/")) {
+      // Handle the error, e.g., show a message to the user
+      showToast("Only Allow Image files", "error");
+      e.target.value = null; // Reset the file input field
+      return; // Exit the function early
+    }
+
+    // Proceed with the API call if the file is a valid image
     const response = await ApiCall(
       "post",
       UploadUrl,
       {
-        files: e.target.files[0],
+        files: file,
       },
       {},
       true
     );
+
     if (response?.status) {
       if (type === "main") {
         formik.setFieldValue("image", BaseUrl + response?.message?.data[0]);
@@ -126,6 +161,9 @@ function ProductManagement() {
         formik.setFieldValue("multipleImages", datas);
       }
     }
+
+    // Reset the file input field after upload is complete
+    e.target.value = null;
   };
 
   const handleRemoveImage = (index) => {

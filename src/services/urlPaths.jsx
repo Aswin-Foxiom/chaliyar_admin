@@ -7,3 +7,4 @@ export const ProductsPath = "products";
 export const CategoryPath = "category";
 export const CategoryDetailsPath = "category-details";
 export const ProductManagementPath = "product-management";
+export const privacyPolicyPath = "privacy&policy";

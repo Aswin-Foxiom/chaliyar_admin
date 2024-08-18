@@ -14,6 +14,7 @@ import {
   LoginPath,
   OrderDetailsPath,
   OrderPath,
+  privacyPolicyPath,
   ProductManagementPath,
   ProductsPath,
   SettingsPath,
@@ -22,11 +23,16 @@ import CategoryDetails from "./pages/private/DetailsPage/CategoryDetails";
 import ProductManagement from "./pages/private/ProductManagement";
 import SettingsPage from "./pages/private/SettingsPage";
 import PrivateRoute from "./utils/PrivateRoute";
+import PrivacyPolicyPage from "./pages/public/PrivacyPolicyPage";
 
 function App() {
   return (
     <div>
       <Routes>
+        <Route
+          path={IndexPath + privacyPolicyPath}
+          element={<PrivacyPolicyPage />}
+        />
         <Route path={IndexPath + LoginPath} element={<Login />} />
         <Route
           path={IndexPath}

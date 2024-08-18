@@ -89,7 +89,7 @@ function CategoryList() {
         <div className="col-auto align-self-center">
           <a
             href="#"
-            onClick={() => {
+            onClick={(e) => {
               e.preventDefault();
               setaddNew(!addNew);
             }}

@@ -128,6 +128,17 @@ function ProductManagement() {
     }
   };
 
+  const handleRemoveImage = (index) => {
+    // Create a copy of the current multipleImages array
+    const updatedImages = [...formik.values.multipleImages];
+
+    // Remove the image at the specified index
+    updatedImages.splice(index, 1);
+
+    // Update the formik values with the new array
+    formik.setFieldValue("multipleImages", updatedImages);
+  };
+
   return (
     <div>
       <form
@@ -359,7 +370,7 @@ function ProductManagement() {
               ) : null}
             </div>
           </div>
-          {formik.values.multipleImages?.length ? (
+          {/* {formik.values.multipleImages?.length ? (
             <>
               <div className="col-12 col-md-6 col-lg-4 mt-2">
                 {formik.values.multipleImages.map((value, key) => (
@@ -372,6 +383,55 @@ function ProductManagement() {
                       marginRight: "5px",
                     }}
                   />
+                ))}
+              </div>
+            </>
+          ) : (
+            ""
+          )} */}
+          {formik.values.multipleImages?.length ? (
+            <>
+              <div className="col-12 col-md-6 col-lg-4 mt-2">
+                {formik.values.multipleImages.map((value, key) => (
+                  <div
+                    key={key}
+                    style={{
+                      position: "relative",
+                      display: "inline-block",
+                      marginTop: "5px",
+                      marginRight: "5px",
+                    }}
+                  >
+                    <img
+                      src={value}
+                      alt={`Image ${key}`}
+                      style={{
+                        height: "100px",
+                        width: "100px",
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(key)} // Define this function to handle the image removal
+                      style={{
+                        position: "absolute",
+                        top: "0px",
+                        right: "0px",
+                        background: "red",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "50%",
+                        width: "20px",
+                        height: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      X
+                    </button>
+                  </div>
                 ))}
               </div>
             </>

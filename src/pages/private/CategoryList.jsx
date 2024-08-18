@@ -87,7 +87,14 @@ function CategoryList() {
           <h6 className="title">Category List</h6>
         </div>
         <div className="col-auto align-self-center">
-          <a href="#" onClick={() => setaddNew(!addNew)} className="small">
+          <a
+            href="#"
+            onClick={() => {
+              e.preventDefault();
+              setaddNew(!addNew);
+            }}
+            className="small"
+          >
             {addNew ? "close" : "Add New category"}
           </a>
         </div>

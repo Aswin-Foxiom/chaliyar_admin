@@ -7,9 +7,13 @@ import {
   UploadUrl,
 } from "../../services/BaseUrls";
 import { showToast } from "../../utils/Toast";
+import NoDataFound from "../../components/NoDataFound";
+import { capitalizeFirstLetter } from "../../utils/StringFunctions";
 
 function SettingsPage() {
   const fileInputRef = useRef(null);
+  const [addNew, setaddNew] = useState(false);
+  const [pincode_value, setpincode_value] = useState("");
   const [BannerList, setBannerList] = useState([]);
 
   const [isBannerShow, setisBannerShow] = useState(false);
@@ -50,19 +54,52 @@ function SettingsPage() {
     setEditedPincodes(event.target.value);
   };
 
-  const savePincodes = async () => {
-    console.log(typeof editedPincodes);
-    if (typeof editedPincodes != "object") {
-      const pincodeList = editedPincodes?.split(",").map((pin) => pin.trim());
+  // const savePincodes = async () => {
+  //   console.log(typeof editedPincodes);
+  //   if (typeof editedPincodes != "object") {
+  //     const pincodeList = editedPincodes?.split(",").map((pin) => pin.trim());
 
-      console.log(pincodeList);
-      const response = await ApiCall("post", PincodesUrl, {
-        pincodes: pincodeList,
-      });
-      if (response?.status) {
-        getPincodes();
-        showToast("Pincodes updated successfully", "success");
-      }
+  //     console.log(pincodeList);
+  //     const response = await ApiCall("post", PincodesUrl, {
+  //       pincodes: pincodeList,
+  //     });
+  //     if (response?.status) {
+  //       getPincodes();
+  //       showToast("Pincodes updated successfully", "success");
+  //     }
+  //   }
+  // };
+
+  const savePincodes = async () => {
+    // if (typeof editedPincodes !== "object") {
+    //   const pincodeList = editedPincodes
+    //     ?.split(",")
+    //     .map((pin) => pin.trim())
+    //     .filter((pin) => pin.length > 0); // Filter out empty strings
+
+    //   console.log("Pincode List:", pincodeList);
+
+    //   // Check if the new pincode list is different from the existing one
+    //   if (pincodeList.length > 0) {
+    //     const response = await ApiCall("post", PincodesUrl, {
+    //       pincodes: pincodeList,
+    //     });
+    //     if (response?.status) {
+    //       getPincodes();
+    //       showToast("Pincodes updated successfully", "success");
+    //     }
+    //   } else {
+    //     showToast("Please enter valid pincodes.", "error");
+    //   }
+    // }
+    const response = await ApiCall("post", PincodesUrl, {
+      pincodes: [pincode_value],
+    });
+    if (response?.status) {
+      getPincodes();
+      setaddNew(false);
+      showToast("Pincodes updated successfully", "success");
+      setpincode_value("");
     }
   };
 
@@ -104,6 +141,14 @@ function SettingsPage() {
     if (response?.status) {
       getBanners();
       showToast("Banner deleted successfully", "success");
+    }
+  };
+
+  const DeletePincode = async (id) => {
+    const response = await ApiCall("delete", `${PincodesUrl}/${id}`);
+    if (response?.status) {
+      showToast("Pincode deleted successfully", "success");
+      getPincodes();
     }
   };
 
@@ -214,12 +259,24 @@ function SettingsPage() {
         </div>
       )}
 
-      <div className="row mt-3 mb-3">
+      <div className="row mb-3 mt-3">
         <div className="col">
           <h6 className="title">Pincodes</h6>
         </div>
+        <div className="col-auto align-self-center">
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setaddNew(!addNew);
+            }}
+            className="small"
+          >
+            {addNew ? "close" : "Add New Pincode"}
+          </a>
+        </div>
       </div>
-      <div className="row">
+      {/* <div className="row">
         <div className="col-12">
           <textarea
             value={editedPincodes}
@@ -229,15 +286,98 @@ function SettingsPage() {
             rows={5}
           />
         </div>
+      </div> */}
+      {addNew && (
+        <div className="row">
+          <div className="col-12 mb-4">
+            <div className="form-group form-floating">
+              <input
+                type="text"
+                className="form-control "
+                id="coupon"
+                value={pincode_value}
+                onChange={(e) => setpincode_value(e.target.value)}
+                placeholder="Pincode"
+              />
+
+              <div className="tooltip-btn col-auto">
+                {pincode_value &&
+                pincode_value.trim() !== "" &&
+                /^\d{6}$/.test(pincode_value) ? (
+                  <button
+                    onClick={savePincodes}
+                    className="btn btn-44 btn-light text-danger shadow-sm"
+                  >
+                    <i className="bi-save-fill" />
+                  </button>
+                ) : (
+                  <button
+                    disabled
+                    className="btn btn-44 btn-light text-danger shadow-sm"
+                  >
+                    <i className="bi-save-fill" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="row">
+        <div className="col">
+          {pincodes?.length ? (
+            <>
+              {pincodes?.map((value, key) => (
+                <div className="card mb-3" key={key}>
+                  <div className="card-body">
+                    <div className="row">
+                      {/* <div className="col-auto">
+                        <div className="avatar avatar-44 shadow-sm rounded-10">
+                          <img src="assets/img/user3.jpg" alt />
+                        </div>
+                      </div> */}
+                      <div className="col align-self-center ps-3">
+                        <p className="small mb-1">
+                          <a
+                            href="#"
+                            onClick={(e) => e.preventDefault()}
+                            className="fw-medium"
+                          >
+                            {value?.pincode}
+                          </a>{" "}
+                          {/* <span className="text-muted">request send</span> */}
+                        </p>
+                        {/* <p>
+                          150 <span className="text-muted">$</span>{" "}
+                          <small className="text-muted">1 min ago</small>
+                        </p> */}
+                      </div>
+                      <div className="col-auto">
+                        <button
+                          onClick={() => DeletePincode(value?._id)}
+                          className="btn btn-44 btn-light text-danger shadow-sm"
+                        >
+                          <i className="bi bi-trash" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
+          ) : (
+            <NoDataFound />
+          )}
+        </div>
       </div>
 
-      <div className="row mt-3">
+      {/* <div className="row mt-3">
         <div className="col">
           <button className="btn btn-primary" onClick={savePincodes}>
             Save Pincodes
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -51,14 +51,7 @@ export const productValidationSchema = Yup.object({
   originalPrice: Yup.number()
     .required("Original price is required")
     .min(0, "Original price cannot be negative"),
-  discountPrice: Yup.number()
-    .min(0, "Discount price cannot be negative")
-    .when("originalPrice", (originalPrice, schema) => {
-      return schema.max(
-        originalPrice,
-        "Discount price cannot exceed original price"
-      );
-    }),
+  discountPrice: Yup.number().min(0, "Discount price cannot be negative"),
   description: Yup.string()
     .required("Description is required")
     .max(1000, "Description must be at most 1000 characters long"),

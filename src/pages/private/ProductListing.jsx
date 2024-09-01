@@ -218,7 +218,7 @@ function ProductListing() {
                           {/* <span className="text-muted">request send</span> */}
                         </p>
                         <p>
-                          {value?.discountPrice}
+                          {value?.originalPrice}
                           <span className="text-muted"> ₹</span>{" "}
                           <small className="text-muted">
                             ( {value?.priceFor} )

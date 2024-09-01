@@ -82,6 +82,7 @@ function ProductManagement() {
 
   const onProductSubmit = async (values) => {
     var datas = values;
+
     if (values?.status) {
       datas.status = "stock";
     } else {

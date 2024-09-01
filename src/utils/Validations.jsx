@@ -49,7 +49,7 @@ export const productValidationSchema = Yup.object({
   image: Yup.string().required("Image is required"),
   subCategory: Yup.string(),
   originalPrice: Yup.number()
-    .required("Original price is required")
+    .required("Sales price is required")
     .min(0, "Original price cannot be negative"),
   discountPrice: Yup.number().min(0, "Discount price cannot be negative"),
   description: Yup.string()
